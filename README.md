@@ -55,3 +55,50 @@ nativeMessage.off({
 |选择供应商|SelectSupplier|
 |打开页面|OpenPage|
 |打开弹窗|OpenPopup|
+|复制内容|copyWay|
+
+
+### 参数说明
+
+#### OpenPage与OpenPopup
+
+``` typescript
+// 打开普通网页
+nativeMessage.emit({
+  api: 'OpenPopup',
+  content: {
+    type: 0,
+    url: 'https://www.google.com?a=b&c=d',
+  }
+})
+
+// 打开h5内部页面
+nativeMessage.emit({
+  api: 'OpenPopup',
+  content: {
+    type: 1,
+    url: '/#/tokensell?address=0x1234567890',
+  }
+})
+
+// 打开App内部页面
+nativeMessage.emit({
+  api: 'OpenPopup',
+  content: {
+    type: 2,
+    url: '/home?address=0x1234567890',
+  }
+})
+```
+
+#### copyWay 复制文本
+
+``` typescript
+// 复制文本
+nativeMessage.emit({
+  api: 'copyWay',
+  content: {
+    text: '需要复制的文本',
+  }
+})
+```
