@@ -81,6 +81,11 @@ class NativeMessage {
         const fullApi = api + callId;
         this.callbacks[fullApi] = callback;
         this.instance.postMessage(JSON.stringify(sendMessage));
+        if (this.options.timeout) {
+            setTimeout(() => {
+                this._message(new MessageEvent('message', { data: { ...sendMessage, status: 'error' } }));
+            }, this.options.timeout);
+        }
     }
     /**
      * Promise 化的emit
