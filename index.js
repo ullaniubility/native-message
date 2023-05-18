@@ -80,7 +80,9 @@ class NativeMessage {
         const { api, callId } = sendMessage;
         const fullApi = api + callId;
         this.callbacks[fullApi] = callback;
-        this.instance.postMessage(JSON.stringify(sendMessage));
+        this.instance?.postMessage?.(JSON.stringify(sendMessage));
+        const appwindow = window;
+        appwindow?.webkit?.messageHandlers?.['api']?.postMessage?.(JSON.stringify(sendMessage));
         if (this.options.timeout) {
             setTimeout(() => {
                 this._message(new MessageEvent('message', { data: { ...sendMessage, status: 'error' } }));
