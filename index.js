@@ -22,7 +22,7 @@ class NativeMessage {
     }
     _message(evt) {
         try {
-            const data = JSON.parse(evt.data);
+            const data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data);
             const fullApi = data.api + data.callId;
             if (this.callbacks[fullApi]) {
                 this.callbacks[fullApi](data);
@@ -39,7 +39,9 @@ class NativeMessage {
             }
             // eslint-disable-next-line no-empty
         }
-        catch (error) { }
+        catch (error) {
+            console.warn('message parse Error: ', error);
+        }
     }
     _createMessage(msg) {
         return { ...msg, callId: nanoid() };

@@ -63,7 +63,7 @@ export class NativeMessage {
 
   public _message(evt: MessageEvent) {
     try {
-      const data = JSON.parse(evt.data) as IMessageResult
+      const data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data) as IMessageResult
       const fullApi = data.api + data.callId
       if (this.callbacks[fullApi]) {
         (this.callbacks[fullApi] as ICallBack)(data)
@@ -78,7 +78,9 @@ export class NativeMessage {
         }
       }
     // eslint-disable-next-line no-empty
-    } catch (error) {}
+    } catch (error) {
+      console.warn('message parse Error: ', error)
+    }
   }
 
 
