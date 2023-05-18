@@ -86,7 +86,7 @@ export class NativeMessage {
 
 
   public _createMessage(msg: IMessageBase) {
-    return {...msg, callId: nanoid()}
+    return {content: {}, ...msg, callId: nanoid()}
   }
   /**
    * 监听app主动调用的事件
