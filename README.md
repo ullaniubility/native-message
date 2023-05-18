@@ -6,7 +6,9 @@ H5与APP 通信方法说明，本工具可以主动发送消息与被动监听ap
 ``` typescript
 import NativeMessage from 'native-message'
 // 除非理解需求，否则建议全局仅创建一个实例，此方法可多次调用，仅生成一个实例
-const nativeMessage = NativeMessage.getInstance('app暴露出来的方法名称，下面会有一个postMessage方法')
+const nativeMessage = NativeMessage.getInstance('app暴露出来的方法名称，下面会有一个postMessage方法', {
+  timeout: 10000, // 超时时间，单位毫秒，默认不超时
+})
 ```
 
 ### 发送消息
