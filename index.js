@@ -18,7 +18,7 @@ class NativeMessage {
         if (!this.instance) {
             console.error('instance is not exist');
         }
-        window.addEventListener('message', this._message);
+        window.addEventListener('message', this._message.bind(this));
     }
     _message(evt) {
         try {
@@ -34,13 +34,14 @@ class NativeMessage {
                     fns(data);
                 }
                 else {
+                    console.log(fns);
                     fns.forEach(item => item(data));
                 }
             }
             // eslint-disable-next-line no-empty
         }
         catch (error) {
-            console.warn('message parse Error: ', error);
+            console.log('message parse Error: ', error);
         }
     }
     _createMessage(msg) {
@@ -54,7 +55,10 @@ class NativeMessage {
      * @example nativeMessage.on('test', (data) => {})
      */
     on(data, callback) {
-        const { api, content } = data;
+        if (!callback) {
+            return console.error('请传入回调函数，并且不要使用匿名函数');
+        }
+        const { api } = data;
         if (!this.callbacks[api]) {
             this.callbacks[api] = [];
         }

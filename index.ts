@@ -58,7 +58,7 @@ export class NativeMessage {
       console.error('instance is not exist')
     }
 
-    window.addEventListener('message', this._message)
+    window.addEventListener('message', this._message.bind(this))
   }
 
   public _message(evt: MessageEvent) {
@@ -74,12 +74,13 @@ export class NativeMessage {
         if (typeof fns === 'function') {
           (fns as ICallBack)(data)
         } else {
+          console.log(fns)
           fns.forEach(item => item(data))
         }
       }
     // eslint-disable-next-line no-empty
     } catch (error) {
-      console.warn('message parse Error: ', error)
+      console.log('message parse Error: ', error)
     }
   }
 
@@ -94,12 +95,15 @@ export class NativeMessage {
    *
    * @example nativeMessage.on('test', (data) => {})
    */
-  on(data: IMessageResult, callback: ICallBack) {
-    const { api, content} = data
+  on(data: IMessageResult, callback?: ICallBack) {
+    if (!callback) {
+      return console.error('请传入回调函数，并且不要使用匿名函数')
+    }
+    const { api } = data
     if (!this.callbacks[api]) {
       this.callbacks[api] = []
     }
-    (this.callbacks[api] as ICallBack[]).push(callback)
+    (this.callbacks[api] as ICallBack[]).push(callback!)
   }
 
   /**
