@@ -56,6 +56,7 @@ nativeMessage.off({
 |打开页面|OpenPage|
 |打开弹窗|OpenPopup|
 |复制内容|copyWay|
+|获取公用参数|fetchSystemConfig|
 
 
 ### 参数说明
@@ -101,4 +102,15 @@ nativeMessage.emit({
     text: '需要复制的文本',
   }
 })
+```
+
+#### fetchSystemConfig 获取公用参数
+
+``` typescript
+// 复制文本
+await nativeMessage.emitPromise({
+  api: 'fetchSystemConfig'
+})
+
+// => {api: "fetchSystemConfig", content: {…}, result: {…}, status: 'success'}
 ```
