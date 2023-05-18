@@ -107,7 +107,7 @@ nativeMessage.emit({
 #### fetchSystemConfig 获取公用参数
 
 ``` typescript
-// 复制文本
+// 获取公用参数
 await nativeMessage.emitPromise({
   api: 'fetchSystemConfig'
 })
