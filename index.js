@@ -22,9 +22,21 @@ class NativeMessage {
     }
     _message(evt) {
         try {
-            console.log(evt);
             const data = JSON.parse(evt.data);
-            console.log(data);
+            const fullApi = data.api + data.callId;
+            if (this.callbacks[fullApi]) {
+                this.callbacks[fullApi](data);
+                delete this.callbacks[fullApi];
+            }
+            else if (this.callbacks[data.api]) {
+                const fns = this.callbacks[data.api] || [];
+                if (typeof fns === 'function') {
+                    fns(data);
+                }
+                else {
+                    fns.forEach(item => item(data));
+                }
+            }
             // eslint-disable-next-line no-empty
         }
         catch (error) { }
@@ -39,12 +51,12 @@ class NativeMessage {
      *
      * @example nativeMessage.on('test', (data) => {})
      */
-    on(data) {
-        const { _callback = loop, api, funid, ...rest } = data;
+    on(data, callback) {
+        const { api, content } = data;
         if (!this.callbacks[api]) {
             this.callbacks[api] = [];
         }
-        this.callbacks[api].push(_callback);
+        this.callbacks[api].push(callback);
     }
     /**
      * 移除主动监听的方法
@@ -57,19 +69,31 @@ class NativeMessage {
     /**
      * 发送消息给app，如果有返回会通过有回调
      */
-    emit(data) {
-        const { _callback = loop, api, ...rest } = data;
-        if (this.callbacks[api]) {
-            this.callbacks[api] = _callback;
-        }
-        this.instance.postMessage(this._createMessage({ api, ...rest }));
+    emit(data, callback = loop) {
+        const sendMessage = this._createMessage(data);
+        const { api, callId } = sendMessage;
+        const fullApi = api + callId;
+        this.callbacks[fullApi] = callback;
+        this.instance.postMessage(JSON.stringify(sendMessage));
     }
+    /**
+     * Promise 化的emit
+     * @param data IMessageBase
+     * @returns Promise<IMessageResult>
+     *
+     * @example await nativeMessage.emitPromise({api: 'test'})
+     */
     emitPromise(data) {
-        const { _callback = loop, api, ...rest } = data;
-        if (this.callbacks[api]) {
-            this.callbacks[api] = _callback;
-        }
-        this.instance.postMessage(this._createMessage({ api, ...rest }));
+        return new Promise((resolve, reject) => {
+            this.emit(data, (res) => {
+                if (res.status !== 'error') {
+                    resolve(res);
+                }
+                else {
+                    reject(res);
+                }
+            });
+        });
     }
 }
 export { NativeMessage };

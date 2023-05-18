@@ -4,14 +4,19 @@ import { nanoid } from 'nanoid'
  * 消息通信模块
  */
 
-type IMessageResult = {
+type IMessageBase = {
   api: string
   content?: Record<string, any>
   result?: Record<string, any>
 }
 
+type IMessageResult = IMessageBase & {
+  callId: string
+  status: 'success' | 'error'
+}
+
 type IInstance = {
-  postMessage: (data: IMessageResult) => void
+  postMessage: (data: string) => void
 }
 
 type IOptions = {
@@ -22,13 +27,6 @@ type IOptions = {
 }
 
 type ICallBack = (data: IMessageResult) => void
-
-type IEmitProps = {
-  api: string
-  funid: string
-  data: Record<string, unknown>
-  _callback: ICallBack
-}
 
 type AppWindow = Window & {
   webkit: {
@@ -65,15 +63,26 @@ export class NativeMessage {
 
   public _message(evt: MessageEvent) {
     try {
-      console.log(evt)
-      const data = JSON.parse(evt.data)
-      console.log(data)
+      const data = JSON.parse(evt.data) as IMessageResult
+      const fullApi = data.api + data.callId
+      if (this.callbacks[fullApi]) {
+        (this.callbacks[fullApi] as ICallBack)(data)
+        delete this.callbacks[fullApi]
+      } else if(this.callbacks[data.api]) {
+        const fns = this.callbacks[data.api] as ICallBack[] || [];
+
+        if (typeof fns === 'function') {
+          (fns as ICallBack)(data)
+        } else {
+          fns.forEach(item => item(data))
+        }
+      }
     // eslint-disable-next-line no-empty
     } catch (error) {}
   }
 
 
-  public _createMessage(msg: IMessageResult) {
+  public _createMessage(msg: IMessageBase) {
     return {...msg, callId: nanoid()}
   }
   /**
@@ -83,12 +92,12 @@ export class NativeMessage {
    *
    * @example nativeMessage.on('test', (data) => {})
    */
-  on(data: IEmitProps) {
-    const { _callback = loop, api, funid, ...rest} = data
+  on(data: IMessageResult, callback: ICallBack) {
+    const { api, content} = data
     if (!this.callbacks[api]) {
       this.callbacks[api] = []
     }
-    (this.callbacks[api] as ICallBack[]).push(_callback)
+    (this.callbacks[api] as ICallBack[]).push(callback)
   }
 
   /**
@@ -104,20 +113,31 @@ export class NativeMessage {
   /**
    * 发送消息给app，如果有返回会通过有回调
    */
-  emit(data: IEmitProps) {
-    const { _callback = loop, api, ...rest} = data
-    if (this.callbacks[api]) {
-      this.callbacks[api] = _callback
-    }
-    this.instance.postMessage(this._createMessage({api, ...rest}))
+  emit(data: IMessageBase, callback: ICallBack = loop) {
+    const sendMessage = this._createMessage(data)
+    const { api, callId } = sendMessage
+    const fullApi = api + callId
+    this.callbacks[fullApi] = callback
+    this.instance.postMessage(JSON.stringify(sendMessage))
   }
 
-  emitPromise(data: IEmitProps) {
-    const { _callback = loop, api, ...rest} = data
-    if (this.callbacks[api]) {
-      this.callbacks[api] = _callback
-    }
-    this.instance.postMessage(this._createMessage({api, ...rest}))
+  /**
+   * Promise 化的emit
+   * @param data IMessageBase
+   * @returns Promise<IMessageResult>
+   *
+   * @example await nativeMessage.emitPromise({api: 'test'})
+   */
+  emitPromise(data: IMessageBase): Promise<IMessageResult> {
+    return new Promise((resolve, reject) => {
+      this.emit(data, (res) => {
+        if (res.status !== 'error') {
+          resolve(res)
+        } else {
+          reject(res)
+        }
+      })
+    })
   }
 
 }
