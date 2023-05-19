@@ -124,9 +124,12 @@ export class NativeMessage {
     const { api, callId } = sendMessage
     const fullApi = api + callId
     this.callbacks[fullApi] = callback
+    console.log(this.instance)
     this.instance?.postMessage?.(JSON.stringify(sendMessage))
-    const appwindow = (window as unknown as AppWindow)
-    ;(appwindow?.webkit?.messageHandlers?.['api'] as unknown as IInstance)?.postMessage?.(JSON.stringify(sendMessage))
+    if (!this.instance) {
+      const appwindow = (window as unknown as AppWindow)
+      ;(appwindow?.webkit?.messageHandlers?.[api] as unknown as IInstance)?.postMessage?.(JSON.stringify(sendMessage))
+    }
     if (this.options.timeout) {
       setTimeout(() => {
         this._message(new MessageEvent('message', { data: { ...sendMessage, status: 'error' } }))
