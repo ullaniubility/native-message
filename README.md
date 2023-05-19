@@ -59,6 +59,7 @@ nativeMessage.off({
 |打开弹窗|OpenPopup|
 |复制内容|copyWay|
 |获取公用参数|fetchSystemConfig|
+|获取上一个页面传入的参数|fetchPrevPageConfig|
 
 
 ### 参数说明
@@ -115,4 +116,27 @@ await nativeMessage.emitPromise({
 })
 
 // => {api: "fetchSystemConfig", content: {…}, result: {…}, status: 'success'}
+```
+
+#### fetchPrevPageConfig 获取调用页面传入的参数
+
+    为方便跨页面通信，通过此方法获取调用页面传入的参数，比如页面a通过openPopup或者openPage打开了页面b，页面b可以通过此方法获取页面a传入的参数，如果页面b不是通过openPopup或者openPage打开的则返回空对象，status返回error即可
+
+``` typescript
+// 获取调用页面传入的参数
+await nativeMessage.emitPromise({
+  api: 'fetchPrevPageConfig'
+})
+
+// app 可以直接返回调用openPopup或者openPage页面的参数作为result，如果此页面不是通过openPopup或者openPage打开的则返回空对象，status返回error即可
+/**
+ * => {api: "fetchPrevPageConfig", content: {…}, result: {
+ * api: 'OpenPopup',
+ *  content: {
+ *    type: 1,
+ *    url: '/#/tokensell?address=0x1234567890',
+ *    ...可能有的其它字段
+ *  }
+ * }, status: 'success'}
+ */
 ```
