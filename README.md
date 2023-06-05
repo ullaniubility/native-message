@@ -133,7 +133,7 @@ await nativeMessage.emitPromise({
 #### fetchUserAddressList 获取当前用户所有地址
 
 ``` typescript
-// 获取公用参数
+// 获取当前用户所有地址
 await nativeMessage.emitPromise({
   api: 'fetchUserAddressList'
 })
