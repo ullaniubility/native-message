@@ -60,6 +60,7 @@ nativeMessage.off({
 |复制内容|copyWay|
 |获取公用参数|fetchSystemConfig|
 |获取当前用户所有地址|fetchUserAddressList|
+|广播消息|broadcastMessage|
 
 
 ### 参数说明
@@ -146,4 +147,19 @@ await nativeMessage.emitPromise({
 //       }
 //     ]
 // }, status: 'success'}
+```
+
+#### broadcastMessage 广播消息
+
+A页面执行此方法当前应用内所有活跃的webview都会收到此消息
+
+``` typescript
+// A页面 发送广播消息
+await nativeMessage.emitPromise({
+  api: 'broadcastMessage',
+  content: {...}
+})
+
+// 其它页面 监听广播消息
+// => {api: "broadcastMessage", content: {…}, result: {...}, status: 'success'}
 ```
