@@ -61,6 +61,9 @@ nativeMessage.off({
 |获取公用参数|fetchSystemConfig|
 |获取当前用户所有地址|fetchUserAddressList|
 |广播消息|broadcastMessage|
+|保存到数据库|saveH5Data|
+|获取数据|getH5Data|
+|删除数据|delH5Data|
 
 
 ### 参数说明
@@ -162,4 +165,49 @@ await nativeMessage.emitPromise({
 
 // 其它页面 监听广播消息
 // => {api: "broadcastMessage", content: {…}, result: {...}, status: 'success'}
+```
+
+#### saveH5Data 保存数据
+
+永久保存数据到app本地数据库中，固定格式数据，key值为字符串，名称重复会导致更新，所以请添加命名空间，value值为JSON格式字符串
+
+``` typescript
+await nativeMessage.emitPromise({
+  api: 'saveH5Data',
+  content: {
+    key: 'key',
+    value: 'value',
+  }
+})
+
+// 保存数据
+// => {api: "saveH5Data", content: {…}, result: {...}, status: 'success'}
+```
+
+#### getH5Data 获取数据
+
+``` typescript
+await nativeMessage.emitPromise({
+  api: 'getH5Data',
+  content: {
+    key: 'key',
+  }
+})
+
+// 保存数据
+// => {api: "getH5Data", content: {…}, result: {...}, status: 'success'}
+```
+
+#### delH5Data 删除数据
+
+``` typescript
+await nativeMessage.emitPromise({
+  api: 'delH5Data',
+  content: {
+    key: 'key',
+  }
+})
+
+// 保存数据
+// => {api: "delH5Data", content: {…}, result: {...}, status: 'success'}
 ```
