@@ -21,6 +21,9 @@ class NativeMessage {
         window.addEventListener('message', this._message.bind(this));
     }
     _message(evt) {
+        if (this.options.debug) {
+            console.log('NativeMessage|监听到: ', evt);
+        }
         try {
             const data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data);
             const fullApi = data.api + data.callId;
@@ -80,7 +83,9 @@ class NativeMessage {
         const { api, callId } = sendMessage;
         const fullApi = api + callId;
         this.callbacks[fullApi] = callback;
-        console.log(this.instance);
+        if (this.options.debug) {
+            console.log('NativeMessage|发送事件: ', data);
+        }
         this.instance?.postMessage?.(JSON.stringify(sendMessage));
         if (!this.instance) {
             const appwindow = window;

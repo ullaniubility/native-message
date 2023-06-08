@@ -24,6 +24,7 @@ type IOptions = {
    * 超时时间
    */
   timeout?: number
+  debug?: boolean
 }
 
 type ICallBack = (data: IMessageResult) => void
@@ -62,6 +63,10 @@ export class NativeMessage {
   }
 
   public _message(evt: MessageEvent) {
+    if (this.options.debug) {
+      console.log('NativeMessage|监听到: ', evt)
+    }
+
     try {
       const data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data) as IMessageResult
       const fullApi = data.api + data.callId
@@ -124,7 +129,9 @@ export class NativeMessage {
     const { api, callId } = sendMessage
     const fullApi = api + callId
     this.callbacks[fullApi] = callback
-    console.log(this.instance)
+    if (this.options.debug) {
+      console.log('NativeMessage|发送事件: ', data)
+    }
     this.instance?.postMessage?.(JSON.stringify(sendMessage))
     if (!this.instance) {
       const appwindow = (window as unknown as AppWindow)
