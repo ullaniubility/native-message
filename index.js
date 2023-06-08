@@ -14,7 +14,7 @@ class NativeMessage {
         const appwindow = window;
         this.options = options || {};
         // @ts-ignore
-        this.instance = appwindow?.webkit?.messageHandlers?.[instanceName] ?? appwindow[instanceName];
+        this.instance = appwindow?.webkit?.messageHandlers?.[instanceName] ?? appwindow[instanceName] ?? appwindow[instanceName].dispatchMessage;
         if (!this.instance) {
             console.error('instance is not exist');
         }
