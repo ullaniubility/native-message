@@ -53,7 +53,7 @@ export class NativeMessage {
     this.options = options || {}
 
     // @ts-ignore
-    this.instance = (appwindow?.webkit?.messageHandlers?.[instanceName] as unknown as IInstance) ?? (appwindow[instanceName] as unknown as IInstance) ?? (appwindow[instanceName] as unknown as IInstance).dispatchMessage
+    this.instance = (appwindow?.webkit?.messageHandlers?.[instanceName] as unknown as IInstance) ?? (appwindow[instanceName] as unknown as IInstance) ?? (appwindow[instanceName] as unknown as IInstance)?.dispatchMessage
 
     if (!this.instance) {
       console.error('instance is not exist')
