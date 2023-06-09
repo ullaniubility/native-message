@@ -64,6 +64,7 @@ nativeMessage.off({
 |保存到数据库|saveH5Data|
 |获取数据|getH5Data|
 |删除数据|delH5Data|
+|设置右上角菜单|setRightMenu|
 
 
 ### 参数说明
@@ -210,4 +211,44 @@ await nativeMessage.emitPromise({
 
 // 保存数据
 // => {api: "delH5Data", content: {…}, result: {...}, status: 'success'}
+```
+
+#### setRightMenu 设置右上角按钮
+
+``` typescript
+await nativeMessage.emitPromise({
+  api: 'setRightMenu',
+  content: {
+    buttons: [
+      {
+        icon: '图片url',
+        text: '按钮',
+      }
+    ]
+  }
+})
+```
+
+## 监听app方法
+
+方法的命名建议使用大驼峰的规范
+|方法名称|方法API|
+|---|---|
+|当右上角按钮被点击|rightMenuClick|
+
+#### rightMenuClick 当右上角按钮被点击
+
+``` typescript
+nativeMessage.on({
+  api: 'rightMenuClick',
+}, (result) => {
+  // 回调函数
+
+  /**
+   * result: {
+   *  index: 0, // 点击的按钮索引
+   * }
+   */
+})
+
 ```
