@@ -65,6 +65,7 @@ nativeMessage.off({
 |获取数据|getH5Data|
 |删除数据|delH5Data|
 |设置右上角菜单|setRightMenu|
+|事件转发|eventForwarding|
 
 
 ### 参数说明
@@ -229,18 +230,47 @@ await nativeMessage.emitPromise({
 })
 ```
 
+
+#### eventForwarding 事件转发
+跨浏览器页面等场景下，需要将事件转发到其它页面中处理
+
+``` typescript
+await nativeMessage.emitPromise({
+  api: 'eventForwarding',
+  content: {...}
+})
+```
+
 ## 监听app方法
 
 方法的命名建议使用大驼峰的规范
 |方法名称|方法API|
 |---|---|
 |当右上角按钮被点击|rightMenuClick|
+|监听转发|monitorForwarding|
 
 #### rightMenuClick 当右上角按钮被点击
 
 ``` typescript
 nativeMessage.on({
   api: 'rightMenuClick',
+}, (result) => {
+  // 回调函数
+
+  /**
+   * result: {
+   *  index: 0, // 点击的按钮索引
+   * }
+   */
+})
+
+```
+
+#### monitorForwarding 当其它页面调用eventForwarding方法时触发
+
+``` typescript
+nativeMessage.on({
+  api: 'monitorForwarding',
 }, (result) => {
   // 回调函数
 
