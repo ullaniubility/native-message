@@ -224,6 +224,7 @@ await nativeMessage.emitPromise({
       {
         icon: '图片url',
         text: '按钮',
+        iconType: 'filter', // 图标类型，可选值：filter | close | share | more
       }
     ]
   }
