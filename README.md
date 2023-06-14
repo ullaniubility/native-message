@@ -90,6 +90,7 @@ nativeMessage.emit({
   content: {
     type: 0,
     url: 'https://www.google.com?a=b&c=d',
+    force: 0, // 0: 不强制外部浏览器 ｜ 1: 强制外部浏览器, 默认不传
   }
 })
 

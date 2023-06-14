@@ -63,14 +63,14 @@ export class NativeMessage {
   }
 
   public _message(evt: MessageEvent) {
-    if (this.options.debug) {
+    // if (this.options.debug) {
       console.log('NativeMessage|监听到: ', evt)
-    }
+    // }
 
     try {
       const data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data) as IMessageResult
       const fullApi = data.api + (data.callId || '')
-      console.log(fullApi, this.callbacks[fullApi])
+      console.log(data, fullApi, this.callbacks[fullApi])
       if (typeof this.callbacks[fullApi] === 'function') {
         (this.callbacks[fullApi] as ICallBack)(data)
         delete this.callbacks[fullApi]
