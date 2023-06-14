@@ -85,9 +85,9 @@ export class NativeMessage {
       }
     // eslint-disable-next-line no-empty
     } catch (error) {
-      if (this.options.debug) {
+      // if (this.options.debug) {
         console.log('message parse Error: ', error)
-      }
+      // }
     }
   }
 
