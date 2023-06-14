@@ -79,13 +79,14 @@ export class NativeMessage {
         if (typeof fns === 'function') {
           (fns as ICallBack)(data)
         } else {
-          console.log(fns)
           fns.forEach(item => item(data))
         }
       }
     // eslint-disable-next-line no-empty
     } catch (error) {
-      console.log('message parse Error: ', error)
+      if (this.options.debug) {
+        console.log('message parse Error: ', error)
+      }
     }
   }
 
