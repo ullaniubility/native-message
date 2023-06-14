@@ -26,7 +26,7 @@ class NativeMessage {
         }
         try {
             const data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data);
-            const fullApi = data.api + data.callId;
+            const fullApi = data.api + (data.callId || '');
             if (typeof this.callbacks[fullApi] === 'function') {
                 this.callbacks[fullApi](data);
                 delete this.callbacks[fullApi];
