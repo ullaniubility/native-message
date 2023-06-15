@@ -90,7 +90,6 @@ nativeMessage.emit({
   content: {
     type: 0,
     url: 'https://www.google.com?a=b&c=d',
-    force: 0, // 0: 不强制外部浏览器 ｜ 1: 强制外部浏览器, 默认不传
   }
 })
 
@@ -109,6 +108,16 @@ nativeMessage.emit({
   content: {
     type: 2,
     url: '/home?address=0x1234567890',
+  }
+})
+
+// 打开手机浏览器
+nativeMessage.emit({
+  api: 'OpenPopup',
+  content: {
+    type: 3,
+    url: '/home?address=0x1234567890',
+    name: 'browser'
   }
 })
 ```

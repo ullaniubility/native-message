@@ -21,13 +21,15 @@ class NativeMessage {
         window.addEventListener('message', this._message.bind(this));
     }
     _message(evt) {
-        // if (this.options.debug) {
-        console.log('NativeMessage|监听到: ', evt);
-        // }
+        if (this.options.debug) {
+            console.log('NativeMessage|监听到: ', evt);
+        }
         try {
             const data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data);
             const fullApi = data.api + (data.callId || '');
-            console.log(data, fullApi, this.callbacks[fullApi]);
+            if (this.options.debug) {
+                console.log(data, fullApi, this.callbacks[fullApi]);
+            }
             if (typeof this.callbacks[fullApi] === 'function') {
                 this.callbacks[fullApi](data);
                 delete this.callbacks[fullApi];
@@ -44,9 +46,9 @@ class NativeMessage {
             // eslint-disable-next-line no-empty
         }
         catch (error) {
-            // if (this.options.debug) {
-            console.log('message parse Error: ', error);
-            // }
+            if (this.options.debug) {
+                console.log('message parse Error: ', error);
+            }
         }
     }
     _createMessage(msg) {
