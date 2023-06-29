@@ -25,7 +25,7 @@ class NativeMessage {
             console.log('NativeMessage|监听到: ', evt);
         }
         try {
-            const data = typeof evt.data === 'object' ? evt.data : eval(evt.data);
+            const data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data);
             const fullApi = data.api + (data.callId || '');
             if (this.options.debug) {
                 console.log(data, fullApi, this.callbacks[fullApi]);
