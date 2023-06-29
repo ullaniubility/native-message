@@ -1,5 +1,4 @@
 import { nanoid } from 'nanoid';
-import 'jsex';
 class NativeMessage {
     static Instance = null;
     static getInstance(instanceName, options) {
@@ -27,7 +26,7 @@ class NativeMessage {
         }
         try {
             // @ts-ignore
-            const data = typeof evt.data === 'object' ? evt.data : JSON.parse(toJsex(evt.data));
+            const data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data);
             const fullApi = data.api + (data.callId || '');
             if (this.options.debug) {
                 console.log(data, fullApi, this.callbacks[fullApi]);

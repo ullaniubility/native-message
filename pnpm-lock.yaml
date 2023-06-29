@@ -1,22 +1,16 @@
 lockfileVersion: 5.4
 
 specifiers:
-  jsex: ^1.0.28
   nanoid: ^4.0.2
   typescript: ^5.0.4
 
 dependencies:
-  jsex: 1.0.28
   nanoid: 4.0.2
 
 devDependencies:
   typescript: 5.0.4
 
 packages:
-
-  /jsex/1.0.28:
-    resolution: {integrity: sha512-n75/IcBKyOdmqjVEGFTC5bxGgKjm/oIjwIJ7eCzXh0okuEo/Yt7XeqieSh4QogOdLRFxsTgRdPAOkZwf98d4Ag==}
-    dev: false
 
   /nanoid/4.0.2:
     resolution: {integrity: sha512-7ZtY5KTCNheRGfEFxnedV5zFiORN1+Y1N6zvPTnHQd8ENUvfaDBeuJDZb2bN/oXwXxu3qkTXDzy57W5vAmDTBw==}
