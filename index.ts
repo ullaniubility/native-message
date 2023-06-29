@@ -1,5 +1,4 @@
 import { nanoid } from 'nanoid'
-import parseJson from 'parse-json'
 
 /**
  * 消息通信模块
@@ -69,7 +68,7 @@ export class NativeMessage {
     }
 
     try {
-      const data = typeof evt.data === 'object' ? evt.data : parseJson(evt.data) as IMessageResult
+      const data = typeof evt.data === 'object' ? evt.data : eval(evt.data) as IMessageResult
       const fullApi = data.api + (data.callId || '')
       if (this.options.debug) {
         console.log(data, fullApi, this.callbacks[fullApi])

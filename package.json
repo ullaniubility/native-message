@@ -14,7 +14,6 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "nanoid": "^4.0.2",
-    "parse-json": "^7.0.0"
+    "nanoid": "^4.0.2"
   }
 }
