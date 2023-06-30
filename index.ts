@@ -66,19 +66,10 @@ export class NativeMessage {
     if (this.options.debug) {
       console.log('NativeMessage|监听到: ', evt)
     }
-    let getMsg = null
-    if (typeof evt.data === 'object') {
-        getMsg = evt.data
-    }else if(evt.data.indexOf('dappDescription') === 0) {
-        //处理非标准格式的数据
-        console.log('NativeMessage|监听到: ', evt.data);
-        
-    }else{
-        getMsg = JSON.parse(evt.data) as IMessageResult
-    }
+
     try {
       // @ts-ignore
-      const data = getMsg
+      const data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data) as IMessageResult
       const fullApi = data.api + (data.callId || '')
       if (this.options.debug) {
         console.log(data, fullApi, this.callbacks[fullApi])
