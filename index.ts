@@ -69,7 +69,14 @@ export class NativeMessage {
 
     try {
       // @ts-ignore
-      const data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data) as IMessageResult
+      let data: IMessageResult
+      try {
+        data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data) as IMessageResult
+      } catch (error) {
+        // 有换行符问题替换掉
+        data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data.replace(/\n/g,"\\n").replace(/\r/g,"\\r")) as IMessageResult
+      }
+
       const fullApi = data.api + (data.callId || '')
       if (this.options.debug) {
         console.log(data, fullApi, this.callbacks[fullApi])

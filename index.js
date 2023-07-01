@@ -26,7 +26,14 @@ class NativeMessage {
         }
         try {
             // @ts-ignore
-            const data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data);
+            let data;
+            try {
+                data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data);
+            }
+            catch (error) {
+                // 有换行符问题替换掉
+                data = typeof evt.data === 'object' ? evt.data : JSON.parse(evt.data.replace(/\n/g, "\\n").replace(/\r/g, "\\r"));
+            }
             const fullApi = data.api + (data.callId || '');
             if (this.options.debug) {
                 console.log(data, fullApi, this.callbacks[fullApi]);
