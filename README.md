@@ -241,6 +241,16 @@ await nativeMessage.emitPromise({
 })
 ```
 
+#### setPageTitle 修改页面容器标题
+
+``` typescript
+await nativeMessage.emitPromise({
+  api: 'setPageTitle',
+  content: {
+    title: 'title'
+  }
+})
+```
 
 #### eventForwarding 事件转发
 跨浏览器页面等场景下，需要将事件转发到其它页面中处理
